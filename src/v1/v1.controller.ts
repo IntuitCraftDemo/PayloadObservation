@@ -8,6 +8,7 @@ import { PayloadV1Dto } from './dto/payload-v1.dto';
 export class V1Controller {
   constructor(private readonly v1Service: V1Service) {}
 
+  // not in use
   @Post()
   create(@Body() createV1Dto: CreateV1Dto) {
     return this.v1Service.create(createV1Dto);
@@ -18,6 +19,7 @@ export class V1Controller {
     return this.v1Service.payload(id, PayloadV1Dto);
   }
 
+  // not in use
   @Get()
   findAll() {
     return this.v1Service.findAll();
@@ -33,6 +35,7 @@ export class V1Controller {
     return this.v1Service.findAll();
   }
 
+  // not in use
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.v1Service.findOne(+id);
@@ -43,16 +46,19 @@ export class V1Controller {
     return this.v1Service.findOneServiceInfo(+id);
   }
 
+  // not in use
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateV1Dto: UpdateV1Dto) {
     return this.v1Service.update(+id, updateV1Dto);
   }
 
+  // not in use
   @Delete('delete_all')
   removeAll(){
     return this.v1Service.removeAll();
   }
 
+  // not in use
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.v1Service.remove(+id);

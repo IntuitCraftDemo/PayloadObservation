@@ -17,6 +17,7 @@ export class V1Service {
     private connection: Connection,
   ) {}
 
+  // not in use
   create(createV1Dto: CreateV1Dto) {
     return 'This action adds a new v1';
   }
@@ -92,7 +93,6 @@ export class V1Service {
 
     // millionseconds latency
     let latency = epochTime.getTime() - startTime;
-    console.log(latency);
 
     // create and save data
     service.maxLatency = Math.max(service.maxLatency, latency);
@@ -119,22 +119,24 @@ export class V1Service {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      return { code: 400, message: 'Database error.' };
+      return { "code": 400, "message": 'Database error.' };
     } finally {
       await queryRunner.release();
       return {
-        code: latency > 4000 ? 502 : 200,
-        message:
+        "code": latency > 4000 ? 502 : 200,
+        "message":
           latency > 4000 ? 'Heavy payload' : 'Add payload successful.',
-        data: record,
+        "data": record,
       };
     }
   }
 
+  // not in use
   findAll() {
     return this.servicesRepository.find();
   }
 
+  // not in use
   findOne(id: number) {
     return `This action returns a #${id} v1`;
   }
@@ -187,10 +189,12 @@ export class V1Service {
     };
   }
 
+  // not in use
   update(id: number, updateV1Dto: UpdateV1Dto) {
     return `This action updates a #${id} v1`;
   }
 
+  // not in use
   remove(id: number) {
     return `This action removes a #${id} v1`;
   }
