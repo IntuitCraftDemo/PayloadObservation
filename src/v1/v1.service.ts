@@ -123,8 +123,9 @@ export class V1Service {
     } finally {
       await queryRunner.release();
       return {
-        code: 200,
-        message: 'Add payload successful.',
+        code: latency > 4000 ? 502 : 200,
+        message:
+          latency > 4000 ? 'Heavy payload' : 'Add payload successful.',
         data: record,
       };
     }
@@ -174,15 +175,15 @@ export class V1Service {
   // find the infomation about a certain service
   async findOneServiceInfo(id: number) {
     let service = await this.servicesRepository.findOne(id);
-    if (!service){
+    if (!service) {
       return {
-        "code": 400,
-        "message": "No such service."
+        code: 400,
+        message: 'No such service.',
       };
     }
     return {
-      "code": 200,
-      "data": service
+      code: 200,
+      data: service,
     };
   }
 
