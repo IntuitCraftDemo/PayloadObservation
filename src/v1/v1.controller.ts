@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, DefaultValuePipe } from '@nestjs/common';
 import { V1Service } from './v1.service';
 import { CreateV1Dto } from './dto/create-v1.dto';
 import { UpdateV1Dto } from './dto/update-v1.dto';
@@ -33,6 +33,11 @@ export class V1Controller {
   @Get('info')
   findAllServiceInfo(){
     return this.v1Service.findAll();
+  }
+
+  @Get('aggregate')
+  findAggregate(@Query('time', new DefaultValuePipe(5),ParseIntPipe) time: number){
+    return this.v1Service.findAggregate(time);
   }
 
   // not in use

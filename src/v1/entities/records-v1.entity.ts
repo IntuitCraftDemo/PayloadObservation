@@ -3,20 +3,21 @@ import { ServicesV1 } from './services-v1.entity';
 
 @Entity()
 export class RecordsV1 {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column()
+  payload: string;
 
-    @Column()
-    payload: string;
+  @Column({ type: 'timestamptz', default: new Date() })
+  epochTime: Date;
 
-    @Column({type: "timestamptz", default: new Date()})
-    epochTime: Date;
+  @Column()
+  latency: number;
 
-    @Column()
-    latency: number;
+  @Column()
+  serviceId: number;
 
-    @ManyToOne(type => ServicesV1, service => service.records)
-    service: ServicesV1;
-
+  @ManyToOne((type) => ServicesV1, (service) => service.records)
+  service: ServicesV1;
 }

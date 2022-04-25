@@ -11,9 +11,9 @@ import { RecordsV1 } from './entities/records-v1.entity';
 export class V1Service {
   constructor(
     @InjectRepository(ServicesV1)
-    private servicesRepository: Repository<ServicesV1>,
+    public servicesRepository: Repository<ServicesV1>,
     @InjectRepository(RecordsV1)
-    private recordsRepository: Repository<RecordsV1>,
+    public recordsRepository: Repository<RecordsV1>,
     private connection: Connection,
   ) {}
 
@@ -119,14 +119,13 @@ export class V1Service {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      return { "code": 400, "message": 'Database error.' };
+      return { code: 400, message: 'Database error.' };
     } finally {
       await queryRunner.release();
       return {
-        "code": latency > 4000 ? 502 : 200,
-        "message":
-          latency > 4000 ? 'Heavy payload' : 'Add payload successful.',
-        "data": record,
+        code: latency > 4000 ? 502 : 200,
+        message: latency > 4000 ? 'Heavy payload' : 'Add payload successful.',
+        data: record,
       };
     }
   }
@@ -139,6 +138,39 @@ export class V1Service {
   // not in use
   findOne(id: number) {
     return `This action returns a #${id} v1`;
+  }
+
+  async findAggregate(time: number) {
+    let records = await this.recordsRepository.find({
+      order: {
+        epochTime: 'ASC',
+      },
+    });
+    let ret = [];
+    let temp: RecordsV1[] = [];
+    for (let record of records) {
+      if (temp.length == 0) {
+        temp.push(record);
+        continue;
+      }
+      if (
+        record.epochTime.getTime() - temp[0].epochTime.getTime() >
+        time * 60 * 1000
+      ) {
+        ret.push(temp);
+        temp = [record];
+      } else {
+        temp.push(record);
+      }
+    }
+    if (temp.length != 0) {
+      ret.push(temp);
+    }
+    return {
+      code: 200,
+      message: `Aggregated data in ${time} mins interval.`,
+      data: ret,
+    };
   }
 
   createData() {
@@ -201,7 +233,7 @@ export class V1Service {
 
   removeAll() {
     // cannot clear because dependencies
-    this.servicesRepository.clear();
+    // this.servicesRepository.clear();
     return { code: 400 };
   }
 
