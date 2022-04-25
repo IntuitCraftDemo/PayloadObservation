@@ -23,6 +23,16 @@ export class V1Controller {
     return this.v1Service.findAll();
   }
 
+  @Get('create_data')
+  createData(){
+    return this.v1Service.createData();
+  }
+
+  @Get('info')
+  findAllServiceInfo(){
+    return this.v1Service.findAll();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.v1Service.findOne(+id);
@@ -36,6 +46,11 @@ export class V1Controller {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateV1Dto: UpdateV1Dto) {
     return this.v1Service.update(+id, updateV1Dto);
+  }
+
+  @Delete('delete_all')
+  removeAll(){
+    return this.v1Service.removeAll();
   }
 
   @Delete(':id')
