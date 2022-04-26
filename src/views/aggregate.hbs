@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Aggregated info</title>
+    <style>
+      table { font-family: arial, sans-serif; border-collapse: collapse;
+      width:100%; } td, th { border: 1px solid #dddddd; text-align: left;
+      padding:8px; } .interval{background-color: #dddddd;}
+      {{! tr:nth-child(even) { background-color: #dddddd; } }}
+    </style>
+  </head>
+  <body>
+    <div><h1>{{message}}</h1></div>
+    <div>
+      <table>
+        <tr>
+          <th>id</th>
+          <th>payload</th>
+          <th>epochTime</th>
+          <th>latency</th>
+          <th>service</th>
+        </tr>
+        {{#each data}}
+          <tr class='interval'><td colspan='5'><b>Interval start from:</b>
+              {{this.0.epochTime}}</td></tr>
+          {{#each this}}
+            <tr>
+              <td>{{this.id}}</td>
+              <td>{{this.payload}}</td>
+              <td>{{this.epochTime}}</td>
+              <td>{{this.latency}}</td>
+              <td>{{this.serviceId}}</td>
+            </tr>
+          {{/each}}
+        {{/each}}
+      </table>
+    </div>
+  </body>
+</html>
