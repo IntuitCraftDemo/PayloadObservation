@@ -6,6 +6,7 @@ import { UpdateV1Dto } from './dto/update-v1.dto';
 import { PayloadV1Dto } from './dto/payload-v1.dto';
 import { ServicesV1 } from './entities/services-v1.entity';
 import { RecordsV1 } from './entities/records-v1.entity';
+import { ResponseService } from '../response/response.service';
 
 @Injectable()
 export class V1Service {
@@ -15,6 +16,7 @@ export class V1Service {
     @InjectRepository(RecordsV1)
     public recordsRepository: Repository<RecordsV1>,
     private connection: Connection,
+    private readonly responseService: ResponseService,
   ) {}
 
   // not in use
@@ -26,29 +28,23 @@ export class V1Service {
   async payload(id: string, PayloadV1Dto: PayloadV1Dto) {
     // edge case 1
     if (id != PayloadV1Dto.id) {
-      return {
-        code: 400,
-        message:
-          'id in request parameter is different from id in request body.',
-      };
+      return this.responseService.BadRequest(
+        'id in request parameter is different from id in request body.',
+      );
     }
     // find the service
     let service = await this.servicesRepository.findOne(id);
 
     // edge case 2
     if (!service) {
-      return {
-        code: 400,
-        message: `Service #${id} does not exist.`,
-      };
+      return this.responseService.BadRequest(`Service #${id} does not exist.`);
     }
 
     // edge case 3
     if (service.serviceName != PayloadV1Dto.serviceName) {
-      return {
-        code: 400,
-        message: `Service #${id} - '${PayloadV1Dto.serviceName}' does not exist. Do you mean '${service.serviceName}'?`,
-      };
+      return this.responseService.BadRequest(
+        `Service #${id} - '${PayloadV1Dto.serviceName}' does not exist. Do you mean '${service.serviceName}'?`,
+      );
     }
 
     let startTime = new Date().getTime();
@@ -66,14 +62,10 @@ export class V1Service {
         await queryRunner.commitTransaction();
       } catch (err) {
         await queryRunner.rollbackTransaction();
-        return { code: 400, message: 'Database error.' };
+        return this.responseService.Error();
       } finally {
         await queryRunner.release();
-        return {
-          code: 400,
-          message: 'No payload.',
-          data: service,
-        };
+        return this.responseService.BadRequest('No payload.');
       }
     }
 
@@ -107,7 +99,7 @@ export class V1Service {
     record.payload = PayloadV1Dto.payload;
     record.latency = latency;
     record.epochTime = epochTime;
-    record.service = service;
+    record.serviceId = service.id;
 
     const queryRunner = this.connection.createQueryRunner();
 
@@ -119,14 +111,14 @@ export class V1Service {
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
-      return { code: 400, message: 'Database error.' };
+      return this.responseService.Error('Database Error');
     } finally {
       await queryRunner.release();
-      return {
-        code: latency > 4000 ? 502 : 200,
-        message: latency > 4000 ? 'Heavy payload' : 'Add payload successful.',
-        data: record,
-      };
+      return this.responseService.Response(
+        latency > 4000 ? 502 : 200,
+        record,
+        latency > 4000 ? 'Heavy payload' : 'Add payload successful.',
+      );
     }
   }
 
@@ -166,11 +158,10 @@ export class V1Service {
     if (temp.length != 0) {
       ret.push(temp);
     }
-    return {
-      code: 200,
-      message: `Aggregated data in ${time} mins interval.`,
-      data: ret,
-    };
+    return this.responseService.Success(
+      ret,
+      `Aggregated data in ${time} mins interval.`,
+    );
   }
 
   createData() {
@@ -210,15 +201,9 @@ export class V1Service {
   async findOneServiceInfo(id: number) {
     let service = await this.servicesRepository.findOne(id);
     if (!service) {
-      return {
-        code: 400,
-        message: 'No such service.',
-      };
+      return this.responseService.BadRequest('No such service');
     }
-    return {
-      code: 200,
-      data: service,
-    };
+    return this.responseService.Success(service);
   }
 
   // not in use
