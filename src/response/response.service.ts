@@ -26,6 +26,7 @@ export class ResponseService {
     return {
       code: 500,
       message: message,
+      data: {}
     };
   }
 
@@ -33,6 +34,7 @@ export class ResponseService {
     return {
       code: 400,
       message: message,
+      data: {}
     };
   }
 }

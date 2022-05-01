@@ -34,6 +34,7 @@ describe('ResponseService', () => {
     expect(service.Error('error')).toStrictEqual({
       code: 500,
       message: 'error',
+      data: {}
     });
   });
 
@@ -41,6 +42,7 @@ describe('ResponseService', () => {
     expect(service.BadRequest('bad request')).toStrictEqual({
       code: 400,
       message: 'bad request',
+      data: {}
     });
   });
 });
