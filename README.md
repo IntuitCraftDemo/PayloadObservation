@@ -13,6 +13,7 @@ date: Apr, 25th, 2022
   - [Test](#test)
   - [Endpoints](#endpoints)
   - [AWS test database](#aws-test-database)
+  - [Dockerize](#dockerize)
   - [Backend design](#backend-design)
     - [Database entity design:](#database-entity-design)
     - [Backend MVC workflow:](#backend-mvc-workflow)
@@ -67,6 +68,10 @@ port: 5432
 user: postgres
 password: 123456
 database: test
+
+## Dockerize
+
+Docker Hub: yiweizhu/craft-demo:1.0
 
 ## Backend design
 
