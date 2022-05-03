@@ -8,6 +8,7 @@ date: Apr, 25th, 2022
 
 - [Craft Demo](#craft-demo)
   - [Description](#description)
+    - [Tech stack](#tech-stack)
   - [Installation](#installation)
   - [Running the app](#running-the-app)
   - [Test](#test)
@@ -22,6 +23,12 @@ date: Apr, 25th, 2022
 ## Description
 
 It's the repository for intuit A4A craft demo interview. Using [nestjs](https://docs.nestjs.com/) as backend framework. Requirements see [here](./SRE%20A4A%20Craft%20Demo%20(1).docx).
+
+### Tech stack
+
+backend: nestjs
+view: handlebar
+database: postgresql
 
 ## Installation
 
