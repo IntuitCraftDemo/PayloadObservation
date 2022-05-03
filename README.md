@@ -27,7 +27,9 @@ It's the repository for intuit A4A craft demo interview. Using [nestjs](https://
 ### Tech stack
 
 backend: nestjs
+
 view: handlebar
+
 database: postgresql
 
 ## Installation
@@ -49,7 +51,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-visit localhost:3000 to see the webpage.
+Visit localhost:3000 to see the webpage.
 
 ## Test
 
@@ -71,9 +73,13 @@ More detailed black box tests see postman.
 ## AWS test database
 
 host: crafttestdb.ctriu0r3rcfj.us-east-1.rds.amazonaws.com
+
 port: 5432
+
 user: postgres
+
 password: 123456
+
 database: test
 
 ## Dockerize
